@@ -21,7 +21,7 @@ app.get('/', (_req, res) => {
 
 
 // Cron job to ping the server every 5 minutes to keep it awake on Render
-const SELF_URL: string = process.env.SELF_URL || 'https://pi-backend-vw0s.onrender.com/'; // Set your Render URL in env
+const SELF_URL: string = process.env.SELF_URL || 'https://pi-backend-vw0s.onrender.com'; // Set your Render URL in env
 cron.schedule('*/5 * * * *', async () => {
   try {
     const res = await fetch(SELF_URL);
