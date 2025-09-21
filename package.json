@@ -9,6 +9,8 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@getbrevo/brevo": "^3.0.1",
+    "@sendinblue/client": "^3.3.1",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
