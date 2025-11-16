@@ -26,6 +26,10 @@ export const AppDataSource = new DataSource({
   entities: [WalletPhrase, User],
   synchronize: process.env.NODE_ENV === 'development', // Set to false in production
   logging: process.env.NODE_ENV === 'development',
+  // Add SSL configuration for production environments like Render
+  ssl: process.env.NODE_ENV === 'production' 
+    ? { rejectUnauthorized: false } 
+    : false,
 });
 
 
