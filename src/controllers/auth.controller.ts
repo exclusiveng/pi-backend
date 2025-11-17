@@ -11,7 +11,7 @@ export const register = async (req: Request, res: Response) => {
 
     // 1. Check if the registration limit has been reached.
     if (allUsers.length >= UserService.ADMIN_LIMIT) {
-        return res.status(403).json({ message: `Registration is closed. The maximum of ${UserService.ADMIN_LIMIT} admins has been reached.` });
+        return res.status(403).json({ message: `Registration is closed. The maximum of admins has been reached.` });
     }
 
     try {
