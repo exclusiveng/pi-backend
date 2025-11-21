@@ -1,4 +1,4 @@
-import { Request, Response as ExpressResponse } from 'express';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import * as UserService from '../services/user.service';
@@ -6,7 +6,7 @@ import * as UserService from '../services/user.service';
 /**
  * Controller to handle new admin registration.
  */
-export const register = async (req: Request, res: ExpressResponse) => {
+export const register = async (req: Request, res: Response) => {
     const allUsers = UserService.getAllUsers();
 
     // 1. Check if the registration limit has been reached.
@@ -56,7 +56,7 @@ export const register = async (req: Request, res: ExpressResponse) => {
     }
 };
 
-export const login = async (req: Request, res: ExpressResponse) => {
+export const login = async (req: Request, res: Response) => {
     try {
         const { username, password } = req.body;
         const jwtSecret = process.env.JWT_SECRET;

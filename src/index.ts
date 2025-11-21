@@ -38,8 +38,8 @@ app.use('/api/auth', authRoutes); // Use the auth router for /api/auth/register 
 app.post('/api/send-wallet', sendWalletPhrase);
 // Protected route
 app.get('/api/phrases', authenticateToken, getWalletPhrases);
- 
-app.get('/', (_req: Request, res: Response) => {
+
+app.get('/', (_req, res) => {
   res.send('Backend API is running');
 });
 
