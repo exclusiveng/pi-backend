@@ -42,7 +42,7 @@ export const register = async (req: Request, res: Response) => {
 
         // 6. Generate a JWT
         const tokenPayload = { id: newUser.id, username: newUser.username };
-        const token = jwt.sign(tokenPayload, jwtSecret, { expiresIn: '30d' });
+        const token = jwt.sign(tokenPayload, jwtSecret, { expiresIn: '7D' });
 
         // 7. Send the token to the client
         res.status(201).json({
