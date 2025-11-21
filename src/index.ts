@@ -24,7 +24,7 @@ export const AppDataSource = new DataSource({
   type: 'postgres',
   url: process.env.DATABASE_URL,
   entities: [WalletPhrase, User],
-  synchronize: true, // process.env.NODE_ENV === 'development', // Set to false in production
+  synchronize: process.env.NODE_ENV === 'development', // Set to false in production
   logging: process.env.NODE_ENV === 'development',
   // Add SSL configuration for production environments like Render
   ssl: process.env.NODE_ENV === 'production' 
