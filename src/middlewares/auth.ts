@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken'; // Corrected import
+import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken'; // Corrected import
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -14,7 +14,7 @@ export interface AuthenticatedRequest extends Request {
 }
 
 const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const authHeader = req.headers['authorization'];
+    const authHeader = (req as Request).headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Expecting "Bearer TOKEN"
 
     const jwtSecret = process.env.JWT_SECRET;
@@ -27,7 +27,7 @@ const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextF
         return res.status(401).json({ message: 'Access denied. No token provided.' });
     }
 
-    jwt.verify(token, jwtSecret, (err, decoded) => {
+    jwt.verify(token, jwtSecret, (err: VerifyErrors | null, decoded: string | JwtPayload | undefined) => {
         if (err) {
             return res.status(403).json({ message: 'Invalid or expired token.' });
         }
