@@ -28,9 +28,14 @@ export const AppDataSource = new DataSource({
   synchronize: process.env.NODE_ENV === 'development', // Set to false in production
   logging: process.env.NODE_ENV === 'development',
   // Add SSL configuration for production environments like Render
-  ssl: process.env.NODE_ENV === 'production' 
-    ? { rejectUnauthorized: false } 
+  ssl: process.env.NODE_ENV === 'production'
+    ? { rejectUnauthorized: false }
     : false,
+  extra: {
+    max: 20, // Maximum number of connections in the pool
+    idleTimeoutMillis: 30000, // How long a connection can be idle before being closed
+    connectionTimeoutMillis: 2000, // How long to wait for a connection before timing out
+  },
 });
 
 

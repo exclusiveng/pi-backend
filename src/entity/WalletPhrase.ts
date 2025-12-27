@@ -5,7 +5,7 @@ export class WalletPhrase {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column('text')
+  @Column('text', { unique: true })
   passphrase!: string;
 
   @CreateDateColumn()
